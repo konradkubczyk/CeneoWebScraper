@@ -1,20 +1,89 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Ceneo Web Scraper</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-    </head>
-    <body>
-        <header>
-            <h1>Ceneo Web Scraper</h1>
-        </header>
-        <div>
-            <p>{{text}}</p>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ceneo Web Scraper</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Ceneo Web Scraper</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Przełącz nawigację">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="/">Strona główna</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="/statystyki/">Statystyki</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="/historia/">Historia</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2 text-white bg-dark" type="search" placeholder="Search"
+                            aria-label="Wprowadź URL produktu...">
+                        <button class="btn btn-outline-light" type="submit">Szukaj</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="container-fluid p-3">
+        <div class="d-grid gap-3" style="grid-template-columns: 1fr 2fr;">
+            <div class="bg-light border rounded-3 p-3">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                      <a href="#przeglad" class="nav-link active" aria-current="page">
+                        <i class="bi bi-lightbulb-fill me-2"></i>
+                        Przegląd
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#statystyki" class="nav-link link-dark">
+                        <i class="bi bi-bar-chart-line-fill me-2"></i>
+                        Statystyki
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#opinie" class="nav-link link-dark">
+                        <i class="bi bi-chat-right-text-fill me-2"></i>
+                        Opinie
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#pobierz-raport" class="nav-link link-dark">
+                        <i class="bi bi-cloud-download-fill me-2"></i>
+                        Pobierz raport
+                      </a>
+                    </li>
+                  </ul>
+            </div>
+            <div class="bg-light border rounded-3 p-3">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus quidem neque, perferendis aliquam consequuntur cumque deleniti ut laboriosam dolor maiores architecto impedit amet sed animi esse quam saepe? Ipsa, in culpa aperiam ratione fuga ab consequuntur ea, reprehenderit numquam neque qui possimus aut, assumenda sapiente labore blanditiis delectus! Incidunt accusamus soluta, similique provident laborum aperiam dolor nobis! Doloremque pariatur voluptates placeat inventore. Dignissimos incidunt voluptates obcaecati? Deleniti maxime incidunt enim. Voluptates distinctio enim odio quam dolore voluptatibus? Laboriosam, velit! Cum doloribus repellat recusandae accusamus eius blanditiis aliquam veritatis exercitationem perferendis accusantium incidunt dolorum assumenda, fugiat reiciendis similique corrupti beatae pariatur possimus voluptatum. Illum, aperiam. Reiciendis dolorem debitis exercitationem sapiente omnis laboriosam error cum eaque perferendis animi ex magnam quis asperiores minus magni eum, necessitatibus sunt obcaecati fuga! Corrupti expedita quibusdam enim vel vero beatae a fugiat mollitia neque qui iste molestiae reprehenderit ut fugit, et quo? Exercitationem veritatis alias perferendis natus cupiditate mollitia officia doloribus! Repellendus, soluta quos nobis libero tempore pariatur nemo illum veritatis, illo exercitationem inventore est laudantium quas quae? Nisi velit voluptates debitis possimus voluptas, molestias rem id iure ipsum ullam doloribus omnis eos fuga earum, illum laudantium nulla officia doloremque reiciendis nemo praesentium dolor! Sequi, eligendi.
+            </div>
         </div>
-        <footer>
-            <p>&copy; Konrad Kubczyk Uniwersytet Ekonomiczny w Krakowie</p>
-        </footer>
-    </body>
+    </main>
+    <footer class="footer mt-auto py-3 bg-secondary bg-opacity-25 text-muted">
+        <div class="container d-flex justify-content-between">
+            <p class="mb-0">&copy; Konrad Kubczyk</p>
+            <p class="mb-0">Uniwersytet Ekonomiczny w Krakowie</p>
+        </div>
+    </footer>
+</body>
+
 </html>

@@ -8,4 +8,4 @@ def index(name="Hello World!"):
 
 @app.errorhandler(404)
 def error_404(error):
-    return "Strona o podanym adresie nie została odnaleziona. :(", 404
+    return render_template("404.html")
