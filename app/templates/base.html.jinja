@@ -25,13 +25,24 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/">Strona główna</a>
+                            <a class="nav-link" aria-current="page" href="{{url_for('index')}}">
+                                Strona główna
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/statystyki/">Statystyki</a>
+                            <a class="nav-link" aria-current="page" href="{{url_for('extract', product_id=101052360)}}">
+                                Pobierz produkt
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/historia/">Historia</a>
+                            <a class="nav-link" aria-current="page" href="{{url_for('products')}}">
+                                Lista produktów
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{url_for('author')}}">
+                                O autorze
+                            </a>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
@@ -44,7 +55,7 @@
         </nav>
     </header>
     <main class="container-fluid p-3">
-        <div class="d-grid gap-3" style="grid-template-columns: 1fr 2fr;">
+        <div class="d-flex flex-column d-md-grid gap-3" style="grid-template-columns: 1fr 2fr;">
             <div class="bg-light border rounded-3 p-3">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
@@ -74,7 +85,9 @@
                   </ul>
             </div>
             <div class="bg-light border rounded-3 p-3">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus quidem neque, perferendis aliquam consequuntur cumque deleniti ut laboriosam dolor maiores architecto impedit amet sed animi esse quam saepe? Ipsa, in culpa aperiam ratione fuga ab consequuntur ea, reprehenderit numquam neque qui possimus aut, assumenda sapiente labore blanditiis delectus! Incidunt accusamus soluta, similique provident laborum aperiam dolor nobis! Doloremque pariatur voluptates placeat inventore. Dignissimos incidunt voluptates obcaecati? Deleniti maxime incidunt enim. Voluptates distinctio enim odio quam dolore voluptatibus? Laboriosam, velit! Cum doloribus repellat recusandae accusamus eius blanditiis aliquam veritatis exercitationem perferendis accusantium incidunt dolorum assumenda, fugiat reiciendis similique corrupti beatae pariatur possimus voluptatum. Illum, aperiam. Reiciendis dolorem debitis exercitationem sapiente omnis laboriosam error cum eaque perferendis animi ex magnam quis asperiores minus magni eum, necessitatibus sunt obcaecati fuga! Corrupti expedita quibusdam enim vel vero beatae a fugiat mollitia neque qui iste molestiae reprehenderit ut fugit, et quo? Exercitationem veritatis alias perferendis natus cupiditate mollitia officia doloribus! Repellendus, soluta quos nobis libero tempore pariatur nemo illum veritatis, illo exercitationem inventore est laudantium quas quae? Nisi velit voluptates debitis possimus voluptas, molestias rem id iure ipsum ullam doloribus omnis eos fuga earum, illum laudantium nulla officia doloremque reiciendis nemo praesentium dolor! Sequi, eligendi.
+                {% block content %}
+                    <p>base.html.jinja</p>
+                {% endblock content %}
             </div>
         </div>
     </main>
