@@ -4,7 +4,7 @@ import selectors
 import requests
 from bs4 import BeautifulSoup
 from app import app
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, request
 
 def get_item(ancestor, selector, attribute=None, return_list=False):
     try:
@@ -31,20 +31,24 @@ selectors = {
 
 @app.errorhandler(404)
 def error_404(error):
-    return render_template("404.html")
+    return render_template("error.html", error={"title": "Strona nie istnieje", "description": "Strona o podanym adresie nie została odnaleziona."}), 404
 
 @app.route('/')
 def index():
     return render_template("index.html.jinja")
 
+@app.route('/extract')
+def quick_extract():
+    try:
+        product_id = re.search("\d+", request.args.get('product')).group()
+        assert(requests.get(f"https://www.ceneo.pl/{product_id}#tab=reviews").ok)
+        return redirect(f"/extract/{product_id}", code=303)
+    except (AttributeError, AssertionError):
+        return render_template("error.html", error={"title": "Nieprawidłowy produkt", "description": "Produkt o podanym identyfikatorze lub adresie nie jest dostępny."}), 400
+    return render_template("error.html", error={"title": "Błąd serwera", "description": "Wystąpił błąd serwera."}), 500
+
 @app.route('/extract/<product_id>')
 def extract(product_id):
-    # try:
-    #     product_id = re.search("\d+", product_id).group()
-    #     assert(requests.get(f"https://www.ceneo.pl/{product_id}#tab=reviews").ok)
-    # except (AttributeError, AssertionError):
-    #     exit()
-
     url = f"https://www.ceneo.pl/{product_id}#tab=reviews"
     all_opinions = []
 
