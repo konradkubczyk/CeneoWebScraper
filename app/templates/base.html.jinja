@@ -30,7 +30,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ url_for('extract', product_id=101052360) }}">
+                            <a class="nav-link" aria-current="page" href="{{ url_for('extract') }}">
                                 Pobierz produkt
                             </a>
                         </li>
@@ -45,8 +45,8 @@
                             </a>
                         </li>
                     </ul>
-                    <form role="search" class="d-flex" action="/extract">
-                        <input type="search" name="product" class="form-control me-2 text-white bg-dark" placeholder="ID lub URL produktu..."
+                    <form role="search" class="d-flex" action="{{ url_for('extract') }}" method="POST">
+                        <input required type="search" name="product_id" class="form-control me-2 text-white bg-dark" placeholder="ID lub URL produktu..."
                             aria-label="ID lub URL produktu">
                         <button class="btn btn-outline-light" type="submit">Analizuj</button>
                     </form>
