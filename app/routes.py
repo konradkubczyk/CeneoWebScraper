@@ -3,6 +3,7 @@ import re
 import json
 import requests
 import selectors
+import matplotlib
 import numpy as np
 from app import app
 import pandas as pd
@@ -10,6 +11,8 @@ from tkinter import Y
 from bs4 import BeautifulSoup
 from matplotlib import pyplot as plt
 from flask import render_template, redirect, url_for, request
+
+matplotlib.use('Agg')
 
 def get_item(ancestor, selector, attribute=None, return_list=False):
     try:
@@ -70,6 +73,9 @@ def extract():
                 except TypeError:
                     url = None
 
+            if len(all_opinions) == 0:
+                return render_template("error.html", error={"title": "Brak opinii", "description": "Produkt nie posiada żadnych opinii."}), 400
+
             if not os.path.exists(f"app/opinions"):
                 os.makedirs("app/opinions")
 
@@ -94,7 +100,8 @@ def author():
 
 @app.route('/product/<product_id>')
 def product(product_id):
-    opinions = pd.read_json(f"opinions/{product_id}.json")
+    opinions = pd.read_json(f"app/opinions/{product_id}.json")
+    
     opinions["stars"] = opinions["stars"].map(lambda x: float(x.split("/")[0].replace(",", ".")))
 
     stats = {
@@ -104,8 +111,8 @@ def product(product_id):
         "average_score": opinions["stars"].mean().round(2)
     }
 
-    if not os.path.exists(f"app/opinions"):
-        os.makedirs("app/opinions")
+    if not os.path.exists(f"app/plots"):
+        os.makedirs("app/plots")
 
     recommendation = opinions["recommendation"].value_counts(dropna=False).sort_index().reindex(["Nie polecam", "Polecam", None], fill_value=0)
     recommendation.plot.pie(
