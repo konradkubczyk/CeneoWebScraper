@@ -133,4 +133,4 @@ dmypy.json
 
 # Project
 app/opinions/*.*
-app/plots/*.*
+app/static/plots/*.*
