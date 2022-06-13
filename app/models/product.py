@@ -10,9 +10,9 @@ from matplotlib import pyplot as plt
 from app.models.opinion import Opinion
 
 class Product():
-    def __init__(self, product_id, opinions=[], opinions_name="", opinions_count=0, pros_count=0, cons_count=0, average_score=0):
+    def __init__(self, product_id, opinions=[], product_name="", opinions_count=0, pros_count=0, cons_count=0, average_score=0):
         self.product_id = product_id
-        self.opinions_name = opinions_name
+        self.product_name = product_name
         self.opinions = opinions
         self.opinions_count = opinions_count
         self.pros_count = pros_count
@@ -92,13 +92,21 @@ class Product():
         return self
     
     def __str__(self) -> str:
-        pass
+        return f"{self.product_id}, {self.product_name}, {self.opinions}, {self.opinions_count}, {self.pros_count}, {self.cons_count}, {self.average_score}"
 
     def __repr__(self) -> str:
-        pass
+        return self.__str__
 
     def to_dict(self) -> dict:
-        pass
+        return {
+            "product_id": self.product_id,
+            "product_name": self.product_name,
+            "opinions": self.opinions,
+            "opinions_count": self.opinions_count,
+            "pros_count": self.pros_count,
+            "cons_count": self.cons_count,
+            "average_score": self.average_score
+        }
 
     def export_opinions(self):
         if not os.path.exists(f"app/opinions"):
