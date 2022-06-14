@@ -1,6 +1,5 @@
 import os
 import re
-import requests
 import matplotlib
 from app import app
 from app.models.product import Product
@@ -21,16 +20,23 @@ def extract():
     if request.method == "POST":
         try:
             product_id = re.search("\d+", request.form['product_id']).group()
-            assert(requests.get(f"https://www.ceneo.pl/{product_id}#tab=reviews").ok)
-        except AttributeError:
-            return render_template("error.html", error={"title": "Nieprawidłowy produkt", "description": "Produkt o podanym identyfikatorze lub adresie nie jest dostępny."}), 400
+            # assert(requests.get(f"https://www.ceneo.pl/{product_id}#tab=reviews").ok)
+        except AttributeError: # or AssertionError
+            error = "Wprowadzona wartość jest niepoprawna."
+            return render_template("extract.html.jinja", error=error)
+            # return render_template("error.html", error={"title": "Nieprawidłowy produkt", "description": "Produkt o podanym identyfikatorze lub adresie nie jest dostępny."}), 400
         
         product = Product(product_id)
         product.extract_name()
         if product.product_name:
             product.extract_opinions().calculate_stats().draw_charts()
+            product.export_opinions()
+            product.export_product()
         else:
-            return render_template("error.html", error={"title": "Produkt nie istnieje", "description": "Wybrany produkt nie istnieje."}), 400
+            error = "Nie udało się pobrać produktu o podanym identyfikatorze."
+            return render_template("extract.html.jinja", error=error)
+
+            # return render_template("error.html", error={"title": "Produkt nie istnieje", "description": "Wybrany produkt nie istnieje."}), 400
 
         # if len(all_opinions) == 0:
         #     return render_template("error.html", error={"title": "Brak opinii", "description": "Produkt nie posiada żadnych opinii."}), 400
@@ -50,5 +56,8 @@ def author():
 
 @app.route('/product/<product_id>')
 def product(product_id):
-    # return render_template("product.html.jinja", product_id=product_id, stats=stats, opinions=opinions)
-    return render_template("product.html.jinja", product_id=product_id)
+    product = Product(product_id)
+    product.import_product()
+    stats = product.stats_to_dict()
+    opinions = product.opinions_to_df()
+    return render_template("product.html.jinja", product_id=product_id, stats=stats, opinions=opinions)
