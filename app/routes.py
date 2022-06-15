@@ -20,27 +20,28 @@ def extract():
     if request.method == "POST":
         try:
             product_id = re.search("\d+", request.form['product_id']).group()
-            # assert(requests.get(f"https://www.ceneo.pl/{product_id}#tab=reviews").ok)
-        except AttributeError: # or AssertionError
+        except AttributeError:
             error = "Wprowadzona wartość jest niepoprawna."
             return render_template("extract.html.jinja", error=error)
-            # return render_template("error.html", error={"title": "Nieprawidłowy produkt", "description": "Produkt o podanym identyfikatorze lub adresie nie jest dostępny."}), 400
-        
         product = Product(product_id)
         product.extract_name()
         if product.product_name:
-            product.extract_opinions().calculate_stats().draw_charts()
+            product.extract_opinions()
+            print(len(product.opinions))
+            if len(product.opinions) == 0:
+                error = "Produkt nie posiada opinii, nie można przeprowadzić analizy."
+                return render_template("extract.html.jinja", error=error)
+            product.calculate_stats()
+            print(len(product.opinions))
+            product.draw_charts()
+            print(len(product.opinions))
             product.export_opinions()
+            print(len(product.opinions))
             product.export_product()
+            print(len(product.opinions))
         else:
             error = "Nie udało się pobrać produktu o podanym identyfikatorze."
-            return render_template("extract.html.jinja", error=error)
-
-            # return render_template("error.html", error={"title": "Produkt nie istnieje", "description": "Wybrany produkt nie istnieje."}), 400
-
-        # if len(all_opinions) == 0:
-        #     return render_template("error.html", error={"title": "Brak opinii", "description": "Produkt nie posiada żadnych opinii."}), 400
-        
+            return render_template("extract.html.jinja", error=error)        
         return redirect(url_for('product', product_id=product_id))
     else:
         return render_template("extract.html.jinja")
