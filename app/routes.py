@@ -27,18 +27,14 @@ def extract():
         product.extract_name()
         if product.product_name:
             product.extract_opinions()
-            print(len(product.opinions))
+            # Prevent processing products with no opinions
             if len(product.opinions) == 0:
                 error = "Produkt nie posiada opinii, nie można przeprowadzić analizy."
                 return render_template("extract.html.jinja", error=error)
             product.calculate_stats()
-            print(len(product.opinions))
             product.draw_charts()
-            print(len(product.opinions))
             product.export_opinions()
-            print(len(product.opinions))
             product.export_product()
-            print(len(product.opinions))
         else:
             error = "Nie udało się pobrać produktu o podanym identyfikatorze."
             return render_template("extract.html.jinja", error=error)        

@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from locale import normalize
 import os
 import json
 import requests
@@ -9,10 +11,11 @@ from matplotlib import pyplot as plt
 from app.models.opinion import Opinion
 
 class Product():
-    def __init__(self, product_id, opinions=[], product_name="", opinions_count=0, pros_count=0, cons_count=0, average_score=0):
+    def __init__(self, product_id, product_name="", opinions=[], opinions_count=0, pros_count=0, cons_count=0, average_score=0):
         self.product_id = product_id
         self.product_name = product_name
-        self.opinions = opinions
+        # Only copy values of opinions array
+        self.opinions = opinions[:]
         self.opinions_count = opinions_count
         self.pros_count = pros_count
         self.cons_count = cons_count
@@ -26,7 +29,6 @@ class Product():
         return self
 
     def extract_opinions(self):
-        self.opinions = []
         url = f"https://www.ceneo.pl/{self.product_id}#tab=reviews"
         while(url):
             response = requests.get(url)
@@ -59,12 +61,17 @@ class Product():
         if not os.path.exists("app/static/plots"):
             os.makedirs("app/static/plots")
         recommendation = opinions["recommendation"].value_counts(dropna=False).sort_index().reindex(["Nie polecam", "Polecam", None], fill_value=0)
-        recommendation.plot.pie(
-            label = "",
-            autopct = lambda p: "{:.1f}%".format(round(p)) if p > 0 else "",
-            colors = ["crimson", "forestgreen", "lightskyblue"],
-            labels = ["Nie polecam", "Polecam", "Nie mam zdania"]
-        )
+        # Skip drawing a pie chart when no recommendations
+        try:
+            recommendation.plot.pie(
+                label = "",
+                autopct = lambda p: "{:.1f}%".format(round(p)) if p > 0 else "",
+                colors = ["crimson", "forestgreen", "lightskyblue"],
+                labels = ["Nie polecam", "Polecam", "Nie mam zdania"],
+                normalize = True
+            )
+        except ValueError:
+            pass
         plt.title("Rekomendacje")
         plt.savefig(f"app/static/plots/{self.product_id}_recommendations.png")
         plt.close()
