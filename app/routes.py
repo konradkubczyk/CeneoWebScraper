@@ -3,9 +3,13 @@ import re
 import matplotlib
 from app import app
 from app.models.product import Product
+from app.models.database import Database
 from flask import render_template, redirect, url_for, request
 
 matplotlib.use('Agg')
+
+# Database initialization
+database = Database()
 
 @app.errorhandler(404)
 def error_404(error):
