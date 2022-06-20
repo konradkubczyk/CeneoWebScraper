@@ -2,7 +2,7 @@ from app.utils import get_item
 from app.parameters import selectors
 
 class Opinion():
-    def __init__(self, opinion_id="", author="", recommendation=None, stars=0, content="", useful=0, useless=0, published=None, purchased=None, pros=[], cons=[]):
+    def __init__(self, opinion_id="", author="", recommendation=None, stars=0, content="", useful=0, useless=0, published=None, purchased=None, pros=[], cons=[], verified_purchase=None):
         self.opinion_id = opinion_id
         self.author = author
         self.recommendation = recommendation
@@ -14,6 +14,7 @@ class Opinion():
         self.purchased = purchased
         self.pros = pros
         self.cons = cons
+        self.verified_purchase = verified_purchase
 
     def extract_opinion(self, opinion):
         for key, value in selectors.items():

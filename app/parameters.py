@@ -8,5 +8,6 @@ selectors = {
     "published": ["span.user-post__published > time:nth-child(1)", "datetime"],
     "purchased": ["span.user-post__published > time:nth-child(2)", "datetime"],
     "pros": ["div[class$=positives] ~ div.review-feature__item", None, True],
-    "cons": ["div[class$=negatives] ~ div.review-feature__item", None, True]
+    "cons": ["div[class$=negatives] ~ div.review-feature__item", None, True],
+    "verified_purchase": ["div.review-pz"]
 }
