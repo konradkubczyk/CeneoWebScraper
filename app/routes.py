@@ -1,10 +1,13 @@
 import os
 import re
 import math
+import json
 import matplotlib
+import pandas as pd
 from app import app
+from dict2xml import dict2xml
 from app.models.product import Product
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, Response
 
 matplotlib.use('Agg')
 
@@ -80,3 +83,19 @@ def product(product_id):
     stats = product.stats_to_dict()
     opinions = product.opinions_to_df()
     return render_template("product.html.jinja", product_id=product_id, product_name=product.product_name, stats=stats, opinions=opinions, product=product)
+
+@app.route("/product/<product_id>/get-opinions/<format>")
+def download_product(product_id, format):
+    product = Product(product_id)
+    product.import_product()
+    if format == "csv":
+        opinions_df = product.opinions_to_df()
+        csv_object = pd.DataFrame.to_csv(opinions_df)
+        return Response(csv_object, mimetype="text/csv", headers={"Content-Disposition": f"attachment; filename={product_id}_opinions.csv"})
+    opinions_dict = product.opinions_to_dict()
+    if format == "json":
+        json_object = json.dumps(opinions_dict, indent=4)
+        return Response(json_object, mimetype="application/json", headers={"Content-Disposition": f"attachment; filename={product_id}_opinions.json"})
+    if format == "xml":
+        xml_object = dict2xml(opinions_dict)
+        return Response(xml_object, mimetype="application/xml", headers={"Content-Disposition": f"attachment; filename={product_id}_opinions.xml"})
