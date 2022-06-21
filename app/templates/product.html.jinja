@@ -1,4 +1,179 @@
 {% extends "base.html.jinja" %}
 {% block content %}
-    <p>{{product_id}}</p>
+    <div class="d-flex justify-content-between align-content-center">
+        <a class="nav-link" href="https://www.ceneo.pl/{{ product_id }}" target="_blank");">
+            <h1> {{ product_name }} </h1>
+        </a>
+        <div class="btn-group align-self-center" role="group">
+            <a type="button" class="btn btn-outline-secondary text-nowrap" href="{{ url_for('extract') }}/{{ product_id }}">
+                <i class="bi bi-arrow-clockwise me-1"></i>
+                Aktualizuj
+            </a>
+            <a type="button" class="btn btn-outline-secondary text-nowrap" href="https://www.ceneo.pl/{{ product_id }}" target="_blank");">
+                <i class="bi bi-box-arrow-up-right me-1"></i>
+                Zobacz w Ceneo
+            </a>
+            <div class="btn-group" role="group">
+                <a id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle text-nowrap" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-download me-1"></i>
+                    Pobierz
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <li><a class="dropdown-item" href="#">CSV</a></li>
+                    <li><a class="dropdown-item" href="#">JSON</a></li>
+                    <li><a class="dropdown-item" href="#">XML</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="text-bg-secondary rounded p-3 my-3">
+        <div class="row">
+            <div class="col-5 d-flex align-items-center">
+                <ul class="list-group list-group-flush w-100 p-2">
+                    <li class="list-group-item bg-transparent text-light d-flex justify-content-between flex-wrap px-0">
+                        <span class="text-nowrap">
+                            <i class="bi bi-hash me-1"></i>
+                            ID produktu
+                        </span>
+                        <strong>{{ stats.product_id }}</strong>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light d-flex justify-content-between flex-wrap px-0">
+                        <span class="text-nowrap">
+                            <i class="bi bi-cursor-text me-1"></i>
+                            Nazwa
+                        </span>
+                        <strong>{{ stats.product_name }}</strong>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light d-flex justify-content-between flex-wrap px-0">
+                        <span class="text-nowrap">
+                            <i class="bi bi-chat-quote me-1"></i>
+                            Ilość opinii
+                        </span>
+                        <strong>{{ stats.opinions_count }}</strong>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light d-flex justify-content-between flex-wrap px-0">
+                        <span class="text-nowrap">
+                            <i class="bi bi-hand-thumbs-up me-1"></i>
+                            Ilość zalet
+                        </span>
+                        <strong>{{ stats.pros_count }}</strong>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light d-flex justify-content-between flex-wrap px-0">
+                        <span class="text-nowrap">
+                            <i class="bi bi-hand-thumbs-down me-1"></i>
+                            Ilość wad
+                        </span>
+                        <strong>{{ stats.cons_count }}</strong>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light d-flex justify-content-between flex-wrap px-0">
+                        <span class="text-nowrap">
+                            <i class="bi bi-clipboard-data me-1"></i>
+                            Średnia ocena
+                        </span>
+                        <strong>{{ stats.average_score }}</strong>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-7 d-flex align-items-center">
+                <div class="row row-cols-2">
+                    <div>
+                        <a href="/static/plots/{{ product_id }}_stars.png" target="_blank">
+                            <img src="/static/plots/{{ product_id }}_stars.png" class="img-fluid rounded" alt="Wykres słupkowy przyznanych ilości gwiazdek">
+                        </a>
+                    </div>
+                    <div>
+                        <a href="/static/plots/{{ product_id }}_recommendations.png" target="_blank">
+                            <img src="/static/plots/{{ product_id }}_recommendations.png" class="img-fluid rounded" alt="Wykres kołowy rekomendacji">
+                         </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2 class="mt-4 mb-3">Opinie</h2>
+    <div class="d-flex flex-column gap-3">
+        {% for opinion in product.opinions %}
+            <div class="border rounded p-3">
+                <div class="d-flex gap-2 mb-3">
+                    <span class="fw-bold">{{ opinion.stars }}</span>
+                    <div class="vr"></div>
+                    {% if opinion.recommendation == "Polecam" %}
+                        <span class="text-success">Polecam</span>
+                    {% endif %}
+                    {% if not opinion.recommendation %}
+                        <span class="text-secondary">Nie mam zdania</span>
+                    {% endif %}
+                    {% if opinion.recommendation == "Nie polecam" %}
+                        <span class="text-danger">Nie polecam</span>
+                    {% endif %}
+                </div>
+                <p>{{ opinion.content }}</p>
+                <div class="d-flex gap-5">
+                    {% if opinion.pros %}
+                    <div>
+                            <span class="fw-semibold">Zalety</span>
+                            <ul class="list-unstyled">
+                                {% for pro in opinion.pros %}
+                                    <li>
+                                        <i class="bi bi-check-circle me-1 text-success"></i>
+                                        {{ pro }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {% if opinion.cons %}
+                        <div>
+                            <span class="fw-semibold">Wady</span>
+                            <ul class="list-unstyled">
+                                {% for con in opinion.cons %}
+                                    <li>
+                                        <i class="bi bi-x-circle me-1 text-danger"></i>
+                                        {{ con }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+                <hr class="my-3">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <span class="badge text-bg-light border">
+                            <i class="bi bi-hash me-1"></i>
+                            {{ opinion.opinion_id }}
+                        </span>
+                        <span class="badge text-bg-light border">
+                            <i class="bi bi-clock-history me-1"></i>
+                            {{ opinion.purchased }}
+                        </span>
+                        <span class="badge text-bg-light border">
+                            <i class="bi bi-clock me-1"></i>
+                            {{ opinion.published }}
+                        </span>
+                        <span class="badge text-bg-light border">
+                            <i class="bi bi-person-fill me-1"></i>
+                            {{ opinion.author }}
+                        </span>
+                    </div>
+                    <div>
+                        {% if opinion.verified_purchase %}
+                            <span class="badge text-bg-primary">
+                                <i class="bi bi-check-lg me-1"></i>
+                                Zakup zweryfikowany
+                            </span>
+                        {% endif %}
+                        <span class="badge text-bg-success">
+                            <i class="bi bi-hand-thumbs-up-fill me-1"></i>
+                            {{ opinion.useful }}
+                        </span>
+                        <span class="badge text-bg-danger">
+                            <i class="bi bi-hand-thumbs-down-fill me-1"></i>
+                            {{ opinion.useless }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock content %}
