@@ -1,13 +1,36 @@
 {% extends "base.html.jinja" %}
 {% block content %}
+    <h1>Lista produktów</h1>
+    <p>Poniższa lista zawiera produkty, których opinie zostały już przeanalizowane. Kliknij jedną z pozycji aby zobaczyć jej szczegóły.</p>
     <ul class="list-group">
         {% for product in products %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a class="nav-link" href="{{ url_for('product', product_id=product) }}">
-                    <i class="bi bi-info-circle me-2"></i>
-                    {{ product }}
-                </a>
-                <span class="badge bg-secondary rounded-pill">{{ loop.index }}</span>
+                <span class="d-flex gap-3">
+                    <a class="nav-link stretched-link" href="{{ url_for('product', product_id=product.product_id) }}">
+                        <strong> {{ product.product_name }} </strong>
+                    </a>
+                    <span class="badge d-flex align-items-center p-0 text-muted fw-light">{{ product.product_id }}</span>
+                </span>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge rounded-pill border text-bg-light">
+                        {{ product.opinions_count }} opinii
+                    </span>
+                    <div class="vr"></div>
+                    <span class="badge rounded-pill border text-bg-light">
+                        {{ product.average_rating }}
+                        <span class="ms-1">
+                            {% for full_star in range(product.full_stars) %}
+                                <i class="bi bi-star-fill"></i>
+                            {% endfor %}
+                            {% if product.half_star %}
+                                <i class="bi bi-star-half"></i>
+                            {% endif %}
+                            {% for empty_star in range(product.empty_stars) %}
+                                <i class="bi bi-star"></i>
+                            {% endfor %}
+                        </span>
+                    </span>
+                </div>
             </li>
         {% endfor %}
     </ul>

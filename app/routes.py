@@ -1,5 +1,6 @@
 import os
 import re
+import math
 import matplotlib
 from app import app
 from app.models.product import Product
@@ -50,7 +51,18 @@ def extract():
 
 @app.route('/products')
 def products():
-    products = [filename.split(".")[0] for filename in os.listdir("app/opinions")]
+    product_ids = [filename.split(".")[0] for filename in os.listdir("app/opinions")]
+    products = []
+    for product_id in product_ids:
+        product = Product(product_id)
+        product.import_product()
+        product.average_rating = "%.2f" % round(product.average_score, 2)
+        product.full_stars = math.floor(product.average_score)
+        if product.average_score - product.full_stars > 0.75:
+            product.full_stars += 1
+        product.half_star = product.average_score - product.full_stars > 0.25
+        product.empty_stars = 5 - (product.full_stars + product.half_star)
+        products.append(product)
     return render_template("products.html.jinja", products=products)
 
 @app.route('/author')
