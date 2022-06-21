@@ -25,29 +25,33 @@ def index():
 @app.route('/extract', methods=['POST', 'GET'])
 def extract():
     if request.method == "POST":
-        try:
-            product_id = re.search("\d+", request.form['product_id']).group()
-        except AttributeError:
-            error = "Wprowadzona wartość jest niepoprawna."
-            return render_template("extract.html.jinja", error=error)
-        product = Product(product_id)
-        product.extract_name()
-        if product.product_name:
-            product.extract_opinions()
-            # Prevent processing products with no opinions
-            if len(product.opinions) == 0:
-                error = "Produkt nie posiada opinii, nie można przeprowadzić analizy."
-                return render_template("extract.html.jinja", error=error)
-            product.calculate_stats()
-            product.draw_charts()
-            product.export_opinions()
-            product.export_product()
-        else:
-            error = "Nie udało się pobrać produktu o podanym identyfikatorze."
-            return render_template("extract.html.jinja", error=error)        
-        return redirect(url_for('product', product_id=product_id))
+        return direct_extract(request.form['product_id'])
     else:
         return render_template("extract.html.jinja")
+
+@app.route('/extract/<product_id>')
+def direct_extract(product_id):
+    try:
+        product_id = re.search("\d+", product_id).group()
+    except AttributeError:
+        error = "Wprowadzona wartość jest niepoprawna."
+        return render_template("extract.html.jinja", error=error)
+    product = Product(product_id)
+    product.extract_name()
+    if product.product_name:
+        product.extract_opinions()
+        # Prevent processing products with no opinions
+        if len(product.opinions) == 0:
+            error = "Produkt nie posiada opinii, nie można przeprowadzić analizy."
+            return render_template("extract.html.jinja", error=error)
+        product.calculate_stats()
+        product.draw_charts()
+        product.export_opinions()
+        product.export_product()
+    else:
+        error = "Nie udało się pobrać produktu o podanym identyfikatorze."
+        return render_template("extract.html.jinja", error=error)        
+    return redirect(url_for('product', product_id=product_id))
 
 @app.route('/products')
 def products():
@@ -75,4 +79,4 @@ def product(product_id):
     product.import_product()
     stats = product.stats_to_dict()
     opinions = product.opinions_to_df()
-    return render_template("product.html.jinja", product_id=product_id, stats=stats, opinions=opinions)
+    return render_template("product.html.jinja", product_id=product_id, product_name=product.product_name, stats=stats, opinions=opinions, product=product)
