@@ -1,4 +1,28 @@
 {% extends "base.html.jinja" %}
 {% block content %}
-    <p>index.html.jinja</p>
+    <h1>Opis projektu</h1>
+    <h2>Cel aplikacji</h2>
+    <p>Celem aplikacji jest umożliwienie analizy statystyk opinii o produktach, które można znaleźć w serwisie <a href="https://ceneo.pl">Ceneo.pl</a>, w tym:</p>
+    <ul>
+        <li>odsetków rekomendacji,</li>
+        <li>rozkładku ocen,</li>
+        <li>liczebności zalet i wad,</li>
+        <li>i więcej!</li>
+    </ul>
+    <p>Dzięki tym danym aplikacja może okazać się pomocna w poszukiwaniu sprawdzonych produktów, których cechy najbardziej odpowiadają konsumentom.</p>
+    <h2>Opis działania aplikacji</h2>
+    <p>Działanie aplikacji realizowane jest za pomocą następującego przepływu:</p>
+    <ol>
+        <li>ekstrakcja opinii o wybranym przez użytkownika produkcie,</li>
+        <li>przeliczanie statystyk,</li>
+        <li>generowanie wykresów,</li>
+        <li>zapis uzyskanych opinii,</li>
+        <li>zapis podstawowych informacji o produkcie,</li>
+        <li>prezentacja zebranych informacji.</li>
+    </ol>
+    <p>Użytkownik ma możliwość <a href="/extract">wskazania adresu lub identyfikatora interesującego go produktu</a> lub <a href="/products">przeglądania już przeanalizowanych produktów</a>.</p>
+    <h2>Zastosowane biblioteki</h2>
+    <p>Zastosowane biblioteki <span class="badge bg-secondary">TODO</span></p>
+    <h2>Zastosowane podejścia</h2>
+    <p>Zastosowane podejścia <span class="badge bg-secondary">TODO</span></p>
 {% endblock content %}
