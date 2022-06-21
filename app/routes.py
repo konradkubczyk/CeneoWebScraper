@@ -13,7 +13,13 @@ def error_404(error):
 
 @app.route('/')
 def index():
-    return render_template("index.html.jinja")
+    libraries = []
+    for file in ["libraries.txt", "requirements.txt"]:
+        with open(file, "r") as tfile:
+            entries = tfile.readlines()
+            for entry in entries:
+                libraries.append('<li>' + entry.replace('==', ' <span class="badge text-bg-light">') + '</span></li>')
+    return render_template("index.html.jinja", libraries=libraries)
 
 @app.route('/extract', methods=['POST', 'GET'])
 def extract():

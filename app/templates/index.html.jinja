@@ -22,7 +22,11 @@
     </ol>
     <p>Użytkownik ma możliwość <a href="/extract">wskazania adresu lub identyfikatora interesującego go produktu</a> lub <a href="/products">przeglądania już przeanalizowanych produktów</a>.</p>
     <h2>Zastosowane biblioteki</h2>
-    <p>Zastosowane biblioteki <span class="badge bg-secondary">TODO</span></p>
+    <ul>
+        {% for library in libraries %}
+            {{ library }}
+        {% endfor %}
+    </ul>
     <h2>Zastosowane podejścia</h2>
-    <p>Zastosowane podejścia <span class="badge bg-secondary">TODO</span></p>
+    <p>W realizacji projektu zostało wykorzystane podejście obiektowe.</p>
 {% endblock content %}
