@@ -9,16 +9,9 @@
     </div>
     {% endif %}
     <form action="{{ url_for('extract') }}" method="POST" class="mt-3">
-        <div class="row g-3 align-items-center">
-            <!-- <div class="col-auto">
-                <label for="product_id" class="col-form-label">Kod produktu</label>
-            </div> -->
-            <div class="col-auto">
-                <input required type="text" id="product_id" name="product_id" class="form-control" placeholder="Kod produktu">
-            </div>
-            <div class="col-auto">
-                <input type="submit" class="btn btn-primary" value="Analizuj">
-            </div>
+        <div class="input-group">
+            <input required type="text" id="product_id" name="product_id" class="form-control" placeholder="ID lub URL produktu...">
+            <button type="submit" class="btn btn-outline-primary">Analizuj</button>
         </div>
     </form>
 {% endblock content %}
