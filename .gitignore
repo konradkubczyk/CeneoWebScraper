@@ -133,6 +133,7 @@ dmypy.json
 
 # Project
 config.yml
+stack.yml
 app/opinions/*.*
 app/products/*.*
 app/static/plots/*.*

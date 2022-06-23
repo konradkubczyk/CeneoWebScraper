@@ -1,4 +1,7 @@
 from flask import Flask
+from app.gatekeeper import launch
+
+launch()
 
 app = Flask(__name__)
 

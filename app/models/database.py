@@ -1,5 +1,4 @@
 import yaml
-import json
 import mysql.connector
 import app.database_schema as database_schema
 
@@ -48,6 +47,7 @@ class Database():
             print("MySQL connection successful.")
         except mysql.connector.Error as err:
             print(f"Error: '{err}'")
+            exit()
         return cnx
     
     def execute_query(self, query, data=None):

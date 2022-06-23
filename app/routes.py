@@ -1,4 +1,3 @@
-import os
 import re
 import math
 import json
@@ -11,8 +10,6 @@ from app.models.database import Database
 from flask import render_template, redirect, url_for, request, Response
 
 matplotlib.use('Agg')
-
-Database().initialize_database()
 
 @app.errorhandler(404)
 def error_404(error):
