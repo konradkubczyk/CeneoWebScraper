@@ -39,7 +39,7 @@ services:
       - "3307:3306"
 ```
 
-Aby uruchomić serwer MySQL po utworzeniu pliku można skorzystać z komendy `docker stack deploy -c stack.yml mysql` lub `docker-compose -f stack.yml up`.
+Aby uruchomić serwer MySQL po utworzeniu pliku można skorzystać z komendy `docker compose -f stack.yml up`.
 
 ### Konfiguracja programu
 
