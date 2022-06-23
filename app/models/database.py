@@ -1,4 +1,5 @@
 import yaml
+import json
 import mysql.connector
 import app.database_schema as database_schema
 
@@ -12,14 +13,13 @@ class Database():
             self.hostname = config['db']['hostname']
             self.database = database_schema.DB_NAME
             self.tables = database_schema.TABLES
-        self.initialize_database()
 
     def initialize_database(self):
-        connection = self.connect()
-        cursor = connection.cursor()
+        cnx = self.connect()
+        cursor = cnx.cursor()
         query = f"CREATE DATABASE IF NOT EXISTS {self.database} DEFAULT CHARACTER SET 'utf8';"
         cursor.execute(query)
-        connection.database = self.database
+        cnx.database = self.database
         for table_name in self.tables:
             table_description = self.tables[table_name]
             try:
@@ -33,13 +33,13 @@ class Database():
             else:
                 print("OK")
         cursor.close()
-        connection.close()
+        cnx.close()
         print("Database ready.")
 
     def connect(self):
-        connection = None
+        cnx = None
         try:
-            connection = mysql.connector.connect(
+            cnx = mysql.connector.connect(
                 user=self.username,
                 passwd=self.password,
                 host=self.hostname,
@@ -48,4 +48,18 @@ class Database():
             print("MySQL connection successful.")
         except mysql.connector.Error as err:
             print(f"Error: '{err}'")
-        return connection
+        return cnx
+    
+    def execute_query(self, query, data=None):
+        cnx = self.connect()
+        cnx.database = self.database
+        cursor = cnx.cursor()
+        if data:
+            cursor.execute(query, data)
+        else:
+            cursor.execute(query)
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+        print(f"Query executed: {query}")
+

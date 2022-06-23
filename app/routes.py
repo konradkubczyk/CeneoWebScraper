@@ -12,8 +12,7 @@ from flask import render_template, redirect, url_for, request, Response
 
 matplotlib.use('Agg')
 
-# Database initialization
-database = Database()
+Database().initialize_database()
 
 @app.errorhandler(404)
 def error_404(error):
@@ -53,16 +52,26 @@ def direct_extract(product_id):
             return render_template("extract.html.jinja", error=error)
         product.calculate_stats()
         product.draw_charts()
+        # Remove any previous content associated with this product ID before saving new data
+        product.delete_product()
         product.export_opinions()
         product.export_product()
     else:
-        error = "Nie udało się pobrać produktu o podanym identyfikatorze."
+        error = "Nie udało się pobrać danych produktu o podanym identyfikatorze."
         return render_template("extract.html.jinja", error=error)        
     return redirect(url_for('product', product_id=product_id))
 
 @app.route('/products')
 def products():
-    product_ids = [filename.split(".")[0] for filename in os.listdir("app/opinions")]
+    db = Database()
+    query = f"SELECT * FROM `products`;"
+    cnx = db.connect()
+    cnx.database = db.database
+    cursor = cnx.cursor()
+    cursor.execute(query)
+    product_ids = []
+    for product in cursor:
+        product_ids.append(product[0])
     products = []
     for product_id in product_ids:
         product = Product(product_id)
@@ -103,3 +112,10 @@ def download_product(product_id, format):
     if format == "xml":
         xml_object = dict2xml(opinions_dict)
         return Response(xml_object, mimetype="application/xml", headers={"Content-Disposition": f"attachment; filename={product_id}_opinions.xml"})
+
+@app.route("/product/<product_id>/delete")
+def delete_product(product_id):
+    product = Product(product_id)
+    product.import_product()
+    product.delete_product()
+    return redirect(url_for('products'))

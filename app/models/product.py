@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from app.utils import get_item
 from matplotlib import pyplot as plt
 from app.models.opinion import Opinion
+from app.models.database import Database
 
 class Product():
     def __init__(self, product_id, product_name="", opinions=[], opinions_count=0, pros_count=0, cons_count=0, average_score=0):
@@ -124,29 +125,54 @@ class Product():
         return [opinion.to_dict() for opinion in self.opinions]
 
     def export_opinions(self):
-        if not os.path.exists("app/opinions"):
-            os.makedirs("app/opinions")
-        with open(f"app/opinions/{self.product_id}.json", "w", encoding="UTF-8") as jfile:
-            json.dump(self.opinions_to_dict(), jfile, indent=4, ensure_ascii=False)
+        db = Database()
+        query = ("REPLACE INTO `opinions`"
+            "(opinion_id, product_id, author, recommendation, stars, content, useful, useless, published, purchased, pros, cons, verified_purchase)"
+            "VALUES (%(opinion_id)s, %(product_id)s, %(author)s, %(recommendation)s, %(stars)s, %(content)s, %(useful)s, %(useless)s, %(published)s, %(purchased)s, %(pros)s, %(cons)s, %(verified_purchase)s)")
+        for opinion in self.opinions_to_dict():
+            opinion_data = opinion
+            opinion_data['product_id'] = self.product_id
+            opinion_data['content'] = opinion_data['content'].encode("ascii", "ignore")
+            opinion_data['pros'] = json.dumps(opinion_data['pros'])
+            opinion_data['cons'] = json.dumps(opinion_data['cons'])
+            db.execute_query(query, opinion_data)
 
     def export_product(self):
-        if not os.path.exists("app/products"):
-            os.makedirs("app/products")
-        with open(f"app/products/{self.product_id}.json", "w", encoding="UTF-8") as jfile:
-            json.dump(self.stats_to_dict(), jfile, indent=4, ensure_ascii=False)
-    
+        db = Database()
+        query = ("REPLACE INTO `products`"
+            "(product_id, product_name, opinions_count, pros_count, cons_count, average_score)"
+            "VALUES (%(product_id)s, %(product_name)s, %(opinions_count)s, %(pros_count)s, %(cons_count)s, %(average_score)s)")
+        db.execute_query(query, self.stats_to_dict())
+        
     def import_product(self):
-        if os.path.exists(f"app/products/{self.product_id}.json"):
-            with open(f"app/products/{self.product_id}.json", "r", encoding="UTF-8") as jfile:
-                product = json.load(jfile)
-                self.product_id = product["product_id"]
-                self.product_name = product["product_name"]
-                self.opinions_count = product["opinions_count"]
-                self.pros_count = product["pros_count"]
-                self.cons_count = product["cons_count"]
-                self.average_score = product["average_score"]
-        if os.path.exists(f"app/opinions/{self.product_id}.json"):
-            with open(f"app/opinions/{self.product_id}.json", "r", encoding="UTF-8") as jfile:
-                opinions = json.load(jfile)
-                for opinion in opinions:
-                    self.opinions.append(Opinion(**opinion))
+        db = Database()
+        query = f"SELECT * FROM `products` WHERE `product_id`={self.product_id};"
+        cnx = db.connect()
+        cnx.database = db.database
+        cursor = cnx.cursor()
+        cursor.execute(query)
+        product = cursor.fetchall()[0]
+        self.product_id = product[0]
+        self.product_name = product[1]
+        self.opinions_count = product[2]
+        self.pros_count = product[3]
+        self.cons_count = product[4]
+        self.average_score = product[5]
+        cursor.close()
+        cnx.close()
+
+        query = f"SELECT * FROM `opinions` WHERE `product_id`={self.product_id};"
+        cnx = db.connect()
+        cnx.database = db.database
+        cursor = cnx.cursor()
+        cursor.execute(query)
+        for opinion in cursor:
+            self.opinions.append(Opinion(opinion[0], opinion[2], opinion[3], opinion[4], opinion[5], opinion[6], opinion[7], opinion[8], opinion[9], json.loads(opinion[10]), json.loads(opinion[11]), opinion[12]))
+        cursor.close()
+        cnx.close()
+
+    def delete_product(self):
+        db = Database()
+        for table in db.tables:
+            query = f"DELETE FROM `{table}` WHERE `product_id`={self.product_id}"
+            db.execute_query(query)
