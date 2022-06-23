@@ -17,3 +17,40 @@
 |data wystawienia opinii|span.user-post__published > time:nth-child(1)\["datetime"\]|published||
 |data zakupu produktu|span.user-post__published > time:nth-child(2)\["datetime"\]|purchased||
 |potwierdzenie zakupem|div.review-pz|verified_purchase||
+
+## Instalacja
+
+### Baza danych MySQL (Docker)
+
+Program współpracuje z bazą danych MySQL, którą na potrzeby m.in. pracy lokalnej można uruchomić z wykorzystaniem oprogramowania wirtualizacyjnego [Docker](https://www.docker.com/get-started/).
+
+Oto przykładowa zawartość pliku stack.yml:
+
+```
+version: '3.1'
+
+services:
+  db:
+    image: mysql
+    # restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: passwd
+    ports:
+      - "3307:3306"
+```
+
+Aby uruchomić serwer MySQL po utworzeniu pliku można skorzystać z komendy `docker stack deploy -c stack.yml mysql` lub `docker-compose -f stack.yml up`.
+
+### Konfiguracja programu
+
+By program mógł pracować prawidłowo, konieczne jest utworzenie pliku config.yml w katalogu głównym projektu zawierającego dane konfiguracyjne połączenia z bazą danych.
+
+Oto przykładowa zawartość pliku config.yml, pozwalająca na połączenie z bazą danych uruchomioną w poprzedniej sekcji:
+
+```
+db:
+  username: root
+  password: passwd
+  hostname: localhost
+  port: 3307
+```

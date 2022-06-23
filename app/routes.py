@@ -7,9 +7,13 @@ import pandas as pd
 from app import app
 from dict2xml import dict2xml
 from app.models.product import Product
+from app.models.database import Database
 from flask import render_template, redirect, url_for, request, Response
 
 matplotlib.use('Agg')
+
+# Database initialization
+database = Database()
 
 @app.errorhandler(404)
 def error_404(error):
