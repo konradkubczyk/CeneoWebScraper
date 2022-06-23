@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-from locale import normalize
 import os
 import json
 import requests
