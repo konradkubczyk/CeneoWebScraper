@@ -3,13 +3,21 @@
     <h1>Lista produktów</h1>
     <p>Poniższa lista zawiera produkty, których opinie zostały już przeanalizowane. Kliknij jedną z pozycji aby zobaczyć jej szczegóły.</p>
     <ul class="list-group">
+        {% if not products %}
+            <div class="alert alert-secondary" role="alert">
+                Brak produktów w bazie.
+            </div>
+        {% endif %}
         {% for product in products %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <span class="d-flex gap-3">
                     <a class="nav-link" href="{{ url_for('product', product_id=product.product_id) }}">
                         <strong> {{ product.product_name }} </strong>
                     </a>
-                    <span class="badge d-flex align-items-center p-0 text-muted fw-light">{{ product.product_id }}</span>
+                    <span class="badge d-flex align-items-center p-0 text-muted fw-light lh-sm">
+                        <i class="bi bi-hash"></i>
+                        {{ product.product_id }}
+                    </span>
                 </span>
                 <div class="d-flex align-items-center gap-3">
                     <span class="badge rounded-pill border text-bg-light d-flex gap-2">
@@ -36,14 +44,38 @@
                     </span>
                     <div class="vr"></div>
                     <div class="btn-group dropend">
-                        <button class="btn btn-light border btn-sm rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="-5,10">
-                            <i class="bi bi-download"></i>
+                        <button class="btn btn-light border btn-sm rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="-15,10">
+                            <i class="bi bi-three-dots"></i>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><h6 class="dropdown-header">Pobierz opinie</h6></li>
-                            <li><a class="dropdown-item" href="{{ url_for('product', product_id=product.product_id) }}/get-opinions/csv">CSV</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('product', product_id=product.product_id) }}/get-opinions/json">JSON</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('product', product_id=product.product_id) }}/get-opinions/xml">XML</a></li>
+                            <li>
+                                <h6 class="dropdown-header">Pobierz opinie</h6>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('product', product_id=product.product_id) }}/get-opinions/csv">
+                                    <i class="bi bi-table me-1"></i>
+                                    CSV
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('product', product_id=product.product_id) }}/get-opinions/json">
+                                    <i class="bi bi-braces me-1"></i>
+                                    JSON
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('product', product_id=product.product_id) }}/get-opinions/xml">
+                                    <i class="bi bi-code-slash me-1"></i>
+                                    XML
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger bg-light" href="{{ url_for('product', product_id=product.product_id) }}/delete">
+                                    <i class="bi bi-trash3 me-1"></i>
+                                    Usuń
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

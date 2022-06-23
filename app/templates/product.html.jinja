@@ -7,22 +7,40 @@
         <div class="btn-group align-self-center" role="group">
             <a type="button" class="btn btn-outline-secondary text-nowrap" href="{{ url_for('extract') }}/{{ product_id }}">
                 <i class="bi bi-arrow-clockwise me-1"></i>
-                Aktualizuj
+                Odśwież
             </a>
-            <a type="button" class="btn btn-outline-secondary text-nowrap" href="https://www.ceneo.pl/{{ product_id }}" target="_blank");">
+            <a type="button" class="btn btn-outline-secondary text-nowrap" href="https://www.ceneo.pl/{{ product_id }}" target="_blank">
                 <i class="bi bi-box-arrow-up-right me-1"></i>
-                Zobacz w Ceneo
+                Ceneo
             </a>
             <div class="btn-group" role="group">
-                <a id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle text-nowrap" data-bs-toggle="dropdown" aria-expanded="false">
+                <a id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle text-nowrap rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-download me-1"></i>
-                    Pobierz opinie
+                    Opinie
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                    <li><a class="dropdown-item" href="{{ url_for('product', product_id=product.product_id) }}/get-opinions/csv">CSV</a></li>
-                    <li><a class="dropdown-item" href="{{ url_for('product', product_id=product.product_id) }}/get-opinions/json">JSON</a></li>
-                    <li><a class="dropdown-item" href="{{ url_for('product', product_id=product.product_id) }}/get-opinions/xml">XML</a></li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('product', product_id=product.product_id) }}/get-opinions/csv">
+                            <i class="bi bi-table me-1"></i>
+                            CSV
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('product', product_id=product.product_id) }}/get-opinions/json">
+                            <i class="bi bi-braces me-1"></i>
+                            JSON
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('product', product_id=product.product_id) }}/get-opinions/xml">
+                            <i class="bi bi-code-slash me-1"></i>
+                            XML
+                        </a>
+                    </li>
                 </ul>
+                <a type="button" class="btn btn-outline-danger text-nowrap" href="{{ url_for('product', product_id=product.product_id) }}/delete">
+                    <i class="bi bi-trash3"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -108,34 +126,36 @@
                     {% endif %}
                 </div>
                 <p>{{ opinion.content }}</p>
-                <div class="d-flex gap-5">
-                    {% if opinion.pros %}
-                    <div>
-                            <span class="fw-semibold">Zalety</span>
-                            <ul class="list-unstyled">
-                                {% for pro in opinion.pros %}
-                                    <li>
-                                        <i class="bi bi-check-circle me-1 text-success"></i>
-                                        {{ pro }}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                    {% if opinion.cons %}
+                {% if opinion.pros or opinion.cons %}
+                    <div class="d-flex gap-5">
+                        {% if opinion.pros %}
                         <div>
-                            <span class="fw-semibold">Wady</span>
-                            <ul class="list-unstyled">
-                                {% for con in opinion.cons %}
-                                    <li>
-                                        <i class="bi bi-x-circle me-1 text-danger"></i>
-                                        {{ con }}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                </div>
+                                <span class="fw-semibold">Zalety</span>
+                                <ul class="list-unstyled mb-0">
+                                    {% for pro in opinion.pros %}
+                                        <li class="mt-1">
+                                            <i class="bi bi-check-circle me-1 text-success"></i>
+                                            {{ pro }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        {% if opinion.cons %}
+                            <div>
+                                <span class="fw-semibold">Wady</span>
+                                <ul class="list-unstyled mb-0">
+                                    {% for con in opinion.cons %}
+                                        <li class="mt-1">
+                                            <i class="bi bi-x-circle me-1 text-danger"></i>
+                                            {{ con }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
                 <hr class="my-3">
                 <div class="d-flex justify-content-between">
                     <div>
