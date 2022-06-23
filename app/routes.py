@@ -94,7 +94,7 @@ def download_product(product_id, format):
         return Response(csv_object, mimetype="text/csv", headers={"Content-Disposition": f"attachment; filename={product_id}_opinions.csv"})
     opinions_dict = product.opinions_to_dict()
     if format == "json":
-        json_object = json.dumps(opinions_dict, indent=4)
+        json_object = json.dumps(opinions_dict, indent=4, ensure_ascii=False)
         return Response(json_object, mimetype="application/json", headers={"Content-Disposition": f"attachment; filename={product_id}_opinions.json"})
     if format == "xml":
         xml_object = dict2xml(opinions_dict)
