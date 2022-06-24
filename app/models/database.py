@@ -48,6 +48,7 @@ class Database():
         except mysql.connector.Error as err:
             print(f"Error: '{err}'")
             exit()
+        cnx.set_charset_collation("utf8mb4")
         return cnx
     
     def execute_query(self, query, data=None):

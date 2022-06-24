@@ -150,7 +150,7 @@ class Product():
         for opinion in self.opinions_to_dict():
             opinion_data = opinion
             opinion_data['product_id'] = self.product_id
-            opinion_data['content'] = opinion_data['content'].encode("ascii", "ignore")
+            opinion_data['content'] = opinion_data['content']
             opinion_data['pros'] = json.dumps(opinion_data['pros'])
             opinion_data['cons'] = json.dumps(opinion_data['cons'])
             db.execute_query(query, opinion_data)
