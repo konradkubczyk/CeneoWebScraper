@@ -108,94 +108,137 @@
             </div>
         </div>
     </div>
-    <h2 class="mt-4 mb-3">Opinie</h2>
-    <div class="d-flex flex-column gap-3">
-        {% for opinion in product.opinions %}
-            <div class="border rounded p-3">
-                <div class="d-flex gap-2 mb-3">
-                    <span class="fw-bold">{{ opinion.stars }}</span>
-                    <div class="vr"></div>
-                    {% if opinion.recommendation == "Polecam" %}
-                        <span class="text-success">Polecam</span>
-                    {% endif %}
-                    {% if not opinion.recommendation %}
-                        <span class="text-secondary">Nie mam zdania</span>
-                    {% endif %}
-                    {% if opinion.recommendation == "Nie polecam" %}
-                        <span class="text-danger">Nie polecam</span>
-                    {% endif %}
-                </div>
-                <p>{{ opinion.content }}</p>
-                {% if opinion.pros or opinion.cons %}
-                    <div class="d-flex gap-5">
-                        {% if opinion.pros %}
-                        <div>
-                                <span class="fw-semibold">Zalety</span>
-                                <ul class="list-unstyled mb-0">
-                                    {% for pro in opinion.pros %}
-                                        <li class="mt-1">
-                                            <i class="bi bi-check-circle me-1 text-success"></i>
-                                            {{ pro }}
-                                        </li>
-                                    {% endfor %}
-                                </ul>
+
+
+    <ul class="nav nav-tabs my-3" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="opinions-tab" data-bs-toggle="tab" data-bs-target="#opinions-tab-pane" type="button" role="tab" aria-controls="opinions-tab-pane" aria-selected="true">Opinie</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="table-tab" data-bs-toggle="tab" data-bs-target="#table-tab-pane" type="button" role="tab" aria-controls="table-tab-pane" aria-selected="false">Tabela</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="opinions-tab-pane" role="tabpanel" aria-labelledby="opinions-tab" tabindex="0">
+            <div class="d-flex flex-column gap-3">
+                {% for opinion in product.opinions %}
+                    <div class="border rounded p-3">
+                        <div class="d-flex gap-2 mb-3">
+                            <span class="fw-bold">{{ opinion.stars }}</span>
+                            <div class="vr"></div>
+                            {% if opinion.recommendation == "Polecam" %}
+                                <span class="text-success">Polecam</span>
+                            {% endif %}
+                            {% if not opinion.recommendation %}
+                                <span class="text-secondary">Nie mam zdania</span>
+                            {% endif %}
+                            {% if opinion.recommendation == "Nie polecam" %}
+                                <span class="text-danger">Nie polecam</span>
+                            {% endif %}
+                        </div>
+                        <p>{{ opinion.content }}</p>
+                        {% if opinion.pros or opinion.cons %}
+                            <div class="d-flex gap-5">
+                                {% if opinion.pros %}
+                                <div>
+                                        <span class="fw-semibold">Zalety</span>
+                                        <ul class="list-unstyled mb-0">
+                                            {% for pro in opinion.pros %}
+                                                <li class="mt-1">
+                                                    <i class="bi bi-check-circle me-1 text-success"></i>
+                                                    {{ pro }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                                {% if opinion.cons %}
+                                    <div>
+                                        <span class="fw-semibold">Wady</span>
+                                        <ul class="list-unstyled mb-0">
+                                            {% for con in opinion.cons %}
+                                                <li class="mt-1">
+                                                    <i class="bi bi-x-circle me-1 text-danger"></i>
+                                                    {{ con }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
                             </div>
                         {% endif %}
-                        {% if opinion.cons %}
+                        <hr class="my-3">
+                        <div class="d-flex justify-content-between">
                             <div>
-                                <span class="fw-semibold">Wady</span>
-                                <ul class="list-unstyled mb-0">
-                                    {% for con in opinion.cons %}
-                                        <li class="mt-1">
-                                            <i class="bi bi-x-circle me-1 text-danger"></i>
-                                            {{ con }}
-                                        </li>
-                                    {% endfor %}
-                                </ul>
+                                <span class="badge text-bg-light border">
+                                    <i class="bi bi-hash me-1"></i>
+                                    {{ opinion.opinion_id }}
+                                </span>
+                                {% if opinion.purchased %}
+                                <span class="badge text-bg-light border">
+                                    <i class="bi bi-clock-history me-1"></i>
+                                    {{ opinion.purchased }}
+                                </span>
+                                {% endif %}
+                                <span class="badge text-bg-light border">
+                                    <i class="bi bi-clock me-1"></i>
+                                    {{ opinion.published }}
+                                </span>
+                                <span class="badge text-bg-light border">
+                                    <i class="bi bi-person-fill me-1"></i>
+                                    {{ opinion.author }}
+                                </span>
                             </div>
-                        {% endif %}
+                            <div>
+                                {% if opinion.verified_purchase %}
+                                    <span class="badge text-bg-primary">
+                                        <i class="bi bi-check-lg me-1"></i>
+                                        Zakup zweryfikowany
+                                    </span>
+                                {% endif %}
+                                <span class="badge text-bg-success">
+                                    <i class="bi bi-hand-thumbs-up-fill me-1"></i>
+                                    {{ opinion.useful }}
+                                </span>
+                                <span class="badge text-bg-danger">
+                                    <i class="bi bi-hand-thumbs-down-fill me-1"></i>
+                                    {{ opinion.useless }}
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                {% endif %}
-                <hr class="my-3">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <span class="badge text-bg-light border">
-                            <i class="bi bi-hash me-1"></i>
-                            {{ opinion.opinion_id }}
-                        </span>
-                        {% if opinion.purchased %}
-                        <span class="badge text-bg-light border">
-                            <i class="bi bi-clock-history me-1"></i>
-                            {{ opinion.purchased }}
-                        </span>
-                        {% endif %}
-                        <span class="badge text-bg-light border">
-                            <i class="bi bi-clock me-1"></i>
-                            {{ opinion.published }}
-                        </span>
-                        <span class="badge text-bg-light border">
-                            <i class="bi bi-person-fill me-1"></i>
-                            {{ opinion.author }}
-                        </span>
-                    </div>
-                    <div>
-                        {% if opinion.verified_purchase %}
-                            <span class="badge text-bg-primary">
-                                <i class="bi bi-check-lg me-1"></i>
-                                Zakup zweryfikowany
-                            </span>
-                        {% endif %}
-                        <span class="badge text-bg-success">
-                            <i class="bi bi-hand-thumbs-up-fill me-1"></i>
-                            {{ opinion.useful }}
-                        </span>
-                        <span class="badge text-bg-danger">
-                            <i class="bi bi-hand-thumbs-down-fill me-1"></i>
-                            {{ opinion.useless }}
-                        </span>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="table-tab-pane" role="tabpanel" aria-labelledby="table-tab" tabindex="0">
+            <div class="rounded border overflow-hidden">
+                <zing-grid sort filter page-size="20" page-size-options="10,20,50,100" column-resizable viewport-stop data='{{ opinions_json }}'>
+                    <zg-colgroup>
+                        <zg-column index="opinion_id" header="ID" type="custom"></zg-column>
+                        <zg-column index="author" header="Autor" type="custom"></zg-column>
+                        <zg-column index="recommendation" header="Rekomendacja" type="custom"></zg-column>
+                        <zg-column index="stars" header="Ocena" type="custom"></zg-column>
+                        <zg-column index="content" header="Treść" type="custom"></zg-column>
+                        <zg-column index="useful" header="Pomocna" type="number"></zg-column>
+                        <zg-column index="useless" header="Nie pomocna" type="number"></zg-column>
+                        <zg-column index="published" header="Publikacja" type="date"></zg-column>
+                        <zg-column index="purchased" header="Zakup" type="date"></zg-column>
+                        <zg-column index="pros" header="Zalety" type="custom"></zg-column>
+                        <zg-column index="cons" header="Wady" type="custom"></zg-column>
+                        <zg-column index="verified_purchase" header="Weryfikacja" type="custom"></zg-column>
+                    </zg-colgroup>
+                </zing-grid>
+            </div>
+        </div>
     </div>
+    <style>
+        zing-grid {
+            border: none;
+        }
+        zing-grid input {
+            border-radius: 4px;
+            margin: 0px 5px;
+        }
+    </style>
+    <script src="https://cdn.zinggrid.com/zinggrid.min.js"></script>
 {% endblock content %}

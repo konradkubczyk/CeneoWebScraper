@@ -90,8 +90,9 @@ def product(product_id):
     product = Product(product_id)
     product.import_product()
     stats = product.stats_to_dict()
-    opinions = product.opinions_to_df()
-    return render_template("product.html.jinja", product_id=product_id, product_name=product.product_name, stats=stats, opinions=opinions, product=product)
+    opinions_df = product.opinions_to_df()
+    opinions_json = json.dumps(product.opinions_to_dict())
+    return render_template("product.html.jinja", product_id=product_id, product_name=product.product_name, stats=stats, opinions=opinions_df, opinions_json=opinions_json, product=product)
 
 @app.route("/product/<product_id>/get-opinions/<format>")
 def download_product(product_id, format):
