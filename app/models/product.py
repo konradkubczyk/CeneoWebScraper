@@ -47,6 +47,24 @@ class Product():
         opinions["stars"] = opinions["stars"].map(lambda x: float(x.split("/")[0].replace(",", ".")))
         return opinions
 
+    def opinions_to_xml(self):
+        opinions_dict = self.opinions_to_dict()
+        indent = "  "
+        xml_object = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<opinions>\n"
+        for opinion in opinions_dict:
+            xml_object += indent + "<opinion>\n"
+            for property in opinion:
+                if not isinstance(opinion[property], list):
+                    xml_object += indent * 2  + "<" + property + ">" + str(opinion[property]) + "</" + property + ">\n"
+                else:
+                    xml_object += indent * 2  + "<" + property + (">" if len(opinion[property]) == 0 else ">\n" + indent * 2)
+                    for element in opinion[property]:
+                        xml_object += indent + "<" + property[0:-1] + ">" + str(element) + "</" + property[0:-1] + ">\n" + indent * 2
+                    xml_object += "</" + property + ">\n"
+            xml_object += indent + "</opinion>\n"
+        xml_object += "</opinions>"
+        return xml_object
+
     def calculate_stats(self):
         opinions = self.opinions_to_df()
         self.opinions_count = len(opinions)

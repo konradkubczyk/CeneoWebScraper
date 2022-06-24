@@ -4,7 +4,6 @@ import json
 import matplotlib
 import pandas as pd
 from app import app
-from dict2xml import dict2xml
 from app.models.product import Product
 from app.models.database import Database
 from flask import render_template, redirect, url_for, request, Response
@@ -102,13 +101,12 @@ def download_product(product_id, format):
         opinions_df = product.opinions_to_df()
         csv_object = pd.DataFrame.to_csv(opinions_df)
         return Response(csv_object, mimetype="text/csv", headers={"Content-Disposition": f"attachment; filename={product_id}_opinions.csv"})
-    opinions_dict = product.opinions_to_dict()
     if format == "json":
+        opinions_dict = product.opinions_to_dict()
         json_object = json.dumps(opinions_dict, indent=4, ensure_ascii=False)
         return Response(json_object, mimetype="application/json", headers={"Content-Disposition": f"attachment; filename={product_id}_opinions.json"})
     if format == "xml":
-        xml_object = dict2xml(opinions_dict)
-        return Response(xml_object, mimetype="application/xml", headers={"Content-Disposition": f"attachment; filename={product_id}_opinions.xml"})
+        return Response(product.opinions_to_xml(), mimetype="application/xml", headers={"Content-Disposition": f"attachment; filename={product_id}_opinions.xml"})
 
 @app.route("/product/<product_id>/delete")
 def delete_product(product_id):

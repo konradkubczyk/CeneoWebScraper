@@ -30,7 +30,7 @@ class Database():
                 else:
                     print(err.msg)
             else:
-                print("OK")
+                print("done.")
         cursor.close()
         cnx.close()
         print("Database ready.")
