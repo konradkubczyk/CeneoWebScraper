@@ -1,15 +1,15 @@
 {% extends "base.html.jinja" %}
 {% block content %}
     <div class="d-flex justify-content-between align-content-center">
-        <a class="nav-link" href="https://www.ceneo.pl/{{ product_id }}" target="_blank");">
-            <h1> {{ product_name }} </h1>
+        <a class="nav-link" href="https://www.ceneo.pl/{{ product.product_id }}" target="_blank");">
+            <h1> {{ product.product_name }} </h1>
         </a>
         <div class="btn-group align-self-center" role="group">
-            <a type="button" class="btn btn-outline-secondary text-nowrap" href="{{ url_for('extract') }}/{{ product_id }}">
+            <a type="button" class="btn btn-outline-secondary text-nowrap" href="{{ url_for('extract') }}/{{ product.product_id }}">
                 <i class="bi bi-arrow-clockwise me-1"></i>
                 Odśwież
             </a>
-            <a type="button" class="btn btn-outline-secondary text-nowrap" href="https://www.ceneo.pl/{{ product_id }}" target="_blank">
+            <a type="button" class="btn btn-outline-secondary text-nowrap" href="https://www.ceneo.pl/{{ product.product_id }}" target="_blank">
                 <i class="bi bi-box-arrow-up-right me-1"></i>
                 Ceneo
             </a>
@@ -53,52 +53,52 @@
                             <i class="bi bi-hash me-1"></i>
                             ID produktu
                         </span>
-                        <strong>{{ stats.product_id }}</strong>
+                        <strong>{{ product.product_id }}</strong>
                     </li>
                     <li class="list-group-item bg-transparent text-light d-flex justify-content-between flex-wrap px-0">
                         <span class="text-nowrap">
                             <i class="bi bi-cursor-text me-1"></i>
                             Nazwa
                         </span>
-                        <strong>{{ stats.product_name }}</strong>
+                        <strong>{{ product.product_name }}</strong>
                     </li>
                     <li class="list-group-item bg-transparent text-light d-flex justify-content-between flex-wrap px-0">
                         <span class="text-nowrap">
                             <i class="bi bi-chat-quote me-1"></i>
                             Ilość opinii
                         </span>
-                        <strong>{{ stats.opinions_count }}</strong>
+                        <strong>{{ product.opinions_count }}</strong>
                     </li>
                     <li class="list-group-item bg-transparent text-light d-flex justify-content-between flex-wrap px-0">
                         <span class="text-nowrap">
                             <i class="bi bi-hand-thumbs-up me-1"></i>
                             Ilość zalet
                         </span>
-                        <strong>{{ stats.pros_count }}</strong>
+                        <strong>{{ product.pros_count }}</strong>
                     </li>
                     <li class="list-group-item bg-transparent text-light d-flex justify-content-between flex-wrap px-0">
                         <span class="text-nowrap">
                             <i class="bi bi-hand-thumbs-down me-1"></i>
                             Ilość wad
                         </span>
-                        <strong>{{ stats.cons_count }}</strong>
+                        <strong>{{ product.cons_count }}</strong>
                     </li>
                     <li class="list-group-item bg-transparent text-light d-flex justify-content-between flex-wrap px-0">
                         <span class="text-nowrap">
                             <i class="bi bi-clipboard-data me-1"></i>
                             Średnia ocena
                         </span>
-                        <strong>{{ stats.average_score }}</strong>
+                        <strong>{{ product.average_score }}</strong>
                     </li>
                 </ul>
             </div>
             <div class="col-7 d-flex align-items-center">
                 <div class="row row-cols-2">
                     <div>
-                        <img src="/static/plots/{{ product_id }}_stars.png" class="img-fluid rounded" alt="Wykres słupkowy przyznanych ilości gwiazdek">
+                        <img src="/static/plots/{{ product.product_id }}_stars.png" class="img-fluid rounded" alt="Wykres słupkowy przyznanych ilości gwiazdek">
                     </div>
                     <div>
-                        <img src="/static/plots/{{ product_id }}_recommendations.png" class="img-fluid rounded" alt="Wykres kołowy rekomendacji">
+                        <img src="/static/plots/{{ product.product_id }}_recommendations.png" class="img-fluid rounded" alt="Wykres kołowy rekomendacji">
                     </div>
                 </div>
             </div>
@@ -209,7 +209,7 @@
         </div>
         <div class="tab-pane fade" id="table-tab-pane" role="tabpanel" aria-labelledby="table-tab" tabindex="0">
             <div class="rounded border overflow-hidden">
-                <zing-grid sort filter page-size="20" page-size-options="10,20,50,100" column-resizable viewport-stop data='{{ opinions_json }}'>
+                <zing-grid sort filter pager page-size="20" page-size-options="10,20,50,100" column-resizable viewport-stop data='{{ opinions_json }}'>
                     <zg-colgroup>
                         <zg-column index="opinion_id" header="ID" type="custom"></zg-column>
                         <zg-column index="author" header="Autor" type="custom"></zg-column>
@@ -229,11 +229,11 @@
         </div>
         <div class="tab-pane fade" id="charts-tab-pane" role="tabpanel" aria-labelledby="charts-tab" tabindex="0">
             <div class="d-flex justify-content-center flex-wrap flex-lg-nowrap gap-3">
-                <a href="/static/plots/{{ product_id }}_stars.png" target="_blank">
-                    <img src="/static/plots/{{ product_id }}_stars.png" class="img-fluid border rounded" alt="Wykres słupkowy przyznanych ilości gwiazdek">
+                <a href="/static/plots/{{ product.product_id }}_stars.png" target="_blank">
+                    <img src="/static/plots/{{ product.product_id }}_stars.png" class="img-fluid border rounded" alt="Wykres słupkowy przyznanych ilości gwiazdek">
                 </a>
-                <a href="/static/plots/{{ product_id }}_recommendations.png" target="_blank">
-                    <img src="/static/plots/{{ product_id }}_recommendations.png" class="img-fluid border rounded" alt="Wykres kołowy rekomendacji">
+                <a href="/static/plots/{{ product.product_id }}_recommendations.png" target="_blank">
+                    <img src="/static/plots/{{ product.product_id }}_recommendations.png" class="img-fluid border rounded" alt="Wykres kołowy rekomendacji">
                 </a>
             </div>
         </div>
