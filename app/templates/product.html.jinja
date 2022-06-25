@@ -95,27 +95,24 @@
             <div class="col-7 d-flex align-items-center">
                 <div class="row row-cols-2">
                     <div>
-                        <a href="/static/plots/{{ product_id }}_stars.png" target="_blank">
-                            <img src="/static/plots/{{ product_id }}_stars.png" class="img-fluid rounded" alt="Wykres słupkowy przyznanych ilości gwiazdek">
-                        </a>
+                        <img src="/static/plots/{{ product_id }}_stars.png" class="img-fluid rounded" alt="Wykres słupkowy przyznanych ilości gwiazdek">
                     </div>
                     <div>
-                        <a href="/static/plots/{{ product_id }}_recommendations.png" target="_blank">
-                            <img src="/static/plots/{{ product_id }}_recommendations.png" class="img-fluid rounded" alt="Wykres kołowy rekomendacji">
-                         </a>
+                        <img src="/static/plots/{{ product_id }}_recommendations.png" class="img-fluid rounded" alt="Wykres kołowy rekomendacji">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
     <ul class="nav nav-tabs my-3" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="opinions-tab" data-bs-toggle="tab" data-bs-target="#opinions-tab-pane" type="button" role="tab" aria-controls="opinions-tab-pane" aria-selected="true">Opinie</button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="table-tab" data-bs-toggle="tab" data-bs-target="#table-tab-pane" type="button" role="tab" aria-controls="table-tab-pane" aria-selected="false">Tabela</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="charts-tab" data-bs-toggle="tab" data-bs-target="#charts-tab-pane" type="button" role="tab" aria-controls="charts-tab-pane" aria-selected="false">Wykresy</button>
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
@@ -228,6 +225,16 @@
                         <zg-column index="verified_purchase" header="Weryfikacja" type="custom"></zg-column>
                     </zg-colgroup>
                 </zing-grid>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="charts-tab-pane" role="tabpanel" aria-labelledby="charts-tab" tabindex="0">
+            <div class="d-flex justify-content-center flex-wrap flex-lg-nowrap gap-3">
+                <a href="/static/plots/{{ product_id }}_stars.png" target="_blank">
+                    <img src="/static/plots/{{ product_id }}_stars.png" class="img-fluid border rounded" alt="Wykres słupkowy przyznanych ilości gwiazdek">
+                </a>
+                <a href="/static/plots/{{ product_id }}_recommendations.png" target="_blank">
+                    <img src="/static/plots/{{ product_id }}_recommendations.png" class="img-fluid border rounded" alt="Wykres kołowy rekomendacji">
+                </a>
             </div>
         </div>
     </div>

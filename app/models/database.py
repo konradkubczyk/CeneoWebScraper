@@ -44,7 +44,7 @@ class Database():
                 host=self.hostname,
                 port=self.port
             )
-            print("MySQL connection successful.")
+            # print("MySQL connection successful.")
         except mysql.connector.Error as err:
             print(f"Error: '{err}'")
             exit()
@@ -62,5 +62,5 @@ class Database():
         cnx.commit()
         cursor.close()
         cnx.close()
-        print(f"Query executed: {query}")
+        # print(f"Query executed: {query}")
 

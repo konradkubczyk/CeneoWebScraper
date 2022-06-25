@@ -78,17 +78,17 @@ class Product():
         if not os.path.exists("app/static/plots"):
             os.makedirs("app/static/plots")
         recommendation = opinions["recommendation"].value_counts(dropna=False).sort_index().reindex(["Nie polecam", "Polecam", None], fill_value=0)
-        # Skip drawing a pie chart when no recommendations
-        try:
-            recommendation.plot.pie(
-                label = "",
-                autopct = lambda p: "{:.1f}%".format(round(p)) if p > 0 else "",
-                colors = ["crimson", "forestgreen", "lightskyblue"],
-                labels = ["Nie polecam", "Polecam", "Nie mam zdania"],
-                normalize = True
-            )
-        except ValueError:
-            pass
+        if not (recommendation['Polecam'] or recommendation['Nie polecam'] or recommendation[None]):
+            recommendation['Polecam'] = 0
+            recommendation['Nie polecam'] = 0
+            recommendation[None] = 1
+        recommendation.plot.pie(
+            label = "",
+            autopct = lambda p: "{:.1f}%".format(round(p)) if p > 0 else "",
+            colors = ["crimson", "forestgreen", "lightskyblue"],
+            labels = ["Nie polecam", "Polecam", "Nie mam zdania"],
+            normalize = True
+        )
         plt.title("Rekomendacje")
         plt.savefig(f"app/static/plots/{self.product_id}_recommendations.png")
         plt.close()
@@ -194,3 +194,6 @@ class Product():
         for table in db.tables:
             query = f"DELETE FROM `{table}` WHERE `product_id`={self.product_id}"
             db.execute_query(query)
+        for file in [f"{self.product_id}_recommendations.png", f"{self.product_id}_stars.png"]:
+            if os.path.exists(f"app/static/plots/{file}"):
+                os.remove(f"app/static/plots/{file}")

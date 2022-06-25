@@ -17,7 +17,7 @@ def error_404(error):
 @app.route('/')
 def index():
     libraries = []
-    for file in ["libraries.txt", "requirements.txt"]:
+    for file in ["requirements.txt", "libraries.txt"]:
         with open(file, "r") as tfile:
             entries = tfile.readlines()
             for entry in entries:
@@ -47,9 +47,9 @@ def direct_extract(product_id):
             error = "Produkt nie posiada opinii, nie można przeprowadzić analizy."
             return render_template("extract.html.jinja", error=error)
         product.calculate_stats()
-        product.draw_charts()
         # Remove any previous content associated with this product ID before saving new data
         product.delete_product()
+        product.draw_charts()
         product.export_opinions()
         product.export_product()
     else:
