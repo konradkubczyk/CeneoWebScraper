@@ -55,11 +55,13 @@ class Product():
             xml_object += indent + "<opinion>\n"
             for property in opinion:
                 if not isinstance(opinion[property], list):
-                    xml_object += indent * 2  + "<" + property + ">" + str(opinion[property]) + "</" + property + ">\n"
+                    content = str(opinion[property]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                    xml_object += indent * 2  + "<" + property + ">" + content + "</" + property + ">\n"
                 else:
                     xml_object += indent * 2  + "<" + property + (">" if len(opinion[property]) == 0 else ">\n" + indent * 2)
                     for element in opinion[property]:
-                        xml_object += indent + "<" + property[0:-1] + ">" + str(element) + "</" + property[0:-1] + ">\n" + indent * 2
+                        content = str(element).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                        xml_object += indent + "<" + property[0:-1] + ">" + content + "</" + property[0:-1] + ">\n" + indent * 2
                     xml_object += "</" + property + ">\n"
             xml_object += indent + "</opinion>\n"
         xml_object += "</opinions>"
