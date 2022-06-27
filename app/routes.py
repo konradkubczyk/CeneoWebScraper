@@ -90,7 +90,6 @@ def product(product_id):
     product = Product(product_id)
     product.import_product()
     opinions_json = json.dumps(product.opinions_to_dict()).replace("'", "&rsquo;")
-    print(opinions_json)
     return render_template("product.html.jinja", product=product, opinions_json=opinions_json)
 
 @app.route("/product/<product_id>/get-opinions/<format>")
