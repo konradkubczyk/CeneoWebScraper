@@ -4,6 +4,7 @@ import json
 import matplotlib
 import pandas as pd
 from app import app
+import markdown as md
 from app.models.product import Product
 from app.models.database import Database
 from flask import render_template, redirect, url_for, request, Response
@@ -22,7 +23,9 @@ def index():
             entries = tfile.readlines()
             for entry in entries:
                 libraries.append('<li>' + entry.replace('==', ' <span class="badge text-bg-light">') + '</span></li>')
-    return render_template("index.html.jinja", libraries=libraries)
+    with open('README.md', "r") as mdfile:
+        readme_html = md.markdown(mdfile.read(), extensions=['markdown.extensions.tables', 'markdown.extensions.fenced_code'])
+    return render_template("index.html.jinja", libraries=libraries, readme_html=readme_html)
 
 @app.route('/extract', methods=['POST', 'GET'])
 def extract():
